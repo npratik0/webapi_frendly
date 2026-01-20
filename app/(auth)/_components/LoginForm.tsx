@@ -9,31 +9,94 @@ import { LoginData, loginSchema } from "../schema";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import GoogleLogo from "@/public/google.png";
+// import { handleLogin } from "@/lib/actions/auth-action";
+import { handleLogin } from "@/lib/actions/auth-action";
 
 export default function LoginForm() {
+  // const router = useRouter();
+  // const [pending, startTransition] = useTransition();
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [error, setError] = useState<string | null>(null);
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors, isSubmitting },
+  // } = useForm<LoginData>({
+  //   resolver: zodResolver(loginSchema),
+  // });
+
+  // const submit = async (values: LoginData) => {
+  //   setError(null);
+
+  //   startTransition(async () => {
+  //     try {
+  //       const res = await fetch(
+  //         `http://localhost:5050/api/auth/login`,
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify(values),
+  //         }
+  //       );
+
+  //       const data = await res.json();
+
+  //       if (!res.ok) {
+  //         throw new Error(data.message || "Invalid email or password");
+  //       }
+
+  //       // Save auth data
+  //       localStorage.setItem("token", data.token);
+  //       localStorage.setItem("user", JSON.stringify(data.user));
+
+  //       // Redirect after login
+  //       router.push("/auth/dashboard");
+  //     } catch (err: any) {
+  //       setError(err.message);
+  //     }
+  //   });
+  // };
   const router = useRouter();
-  const [pending, startTransition] = useTransition();
-  const [showPassword, setShowPassword] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginData>({
-    resolver: zodResolver(loginSchema),
-  });
-
-  const submit = async (values: LoginData) => {
-    startTransition(async () => {
-      await new Promise((r) => setTimeout(r, 1000));
-      console.log("login", values);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm<LoginData>({
+        resolver: zodResolver(loginSchema),
+        mode: "onSubmit",
     });
-  };
+    const [showPassword, setShowPassword] = useState(false);
+    const [pending, setTransition] = useTransition()
+    const [error, setError] = useState<string | null>(null);
+
+    const submit = async (values: LoginData) => {
+        setError(null);
+
+        // GOTO
+        setTransition(async () => {
+            try {
+                const response = await handleLogin(values);
+                if (!response.success) {
+                    throw new Error(response.message);
+                }
+                if (response.success) {
+                    router.push("/auth/dashboard");
+                } else {
+                    setError('Login failed');
+                }
+            } catch (err: Error | any) {
+                setError(err.message || 'Login failed');
+            }
+        })
+    };
 
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       {/* LEFT BRANDING */}
-      <div className="hidden lg:flex relative bg-gradient-to-br from-blue-600 to-blue-500 text-white items-center justify-center overflow-hidden">
+      <div className="hidden lg:flex relative bg-linear-to-br from-blue-600 to-blue-500 text-white items-center justify-center overflow-hidden">
         <div className="absolute w-96 h-96 bg-white/10 rounded-full -top-20 -right-20" />
         <div className="absolute w-72 h-72 bg-white/10 rounded-full bottom-10 -left-20" />
 
@@ -56,7 +119,7 @@ export default function LoginForm() {
       </div>
 
       {/* RIGHT LOGIN */}
-      <div className="flex items-center justify-center px-6 bg-gradient-to-br from-white to-blue-50">
+      <div className="flex items-center justify-center px-6 bg-linear-to-br from-white to-blue-50">
         <div className="w-full max-w-md space-y-8">
           {/* HEADER */}
           <div className="text-center space-y-1">
@@ -68,22 +131,28 @@ export default function LoginForm() {
             </p>
           </div>
 
+          {/* ERROR MESSAGE */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-2 rounded-lg">
+              {error}
+            </div>
+          )}
+
+      
+
+
           {/* FORM */}
           <form onSubmit={handleSubmit(submit)} className="space-y-5">
             {/* EMAIL */}
             <div>
               <label className="text-sm font-medium">Email</label>
               <div className="relative mt-2">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500 z-10" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />
                 <input
                   type="email"
                   {...register("email")}
                   placeholder="Enter your email"
-                  className="
-                    w-full h-11 bg-white/70 backdrop-blur
-                    border rounded-xl pl-11 pr-4 text-sm
-                    focus:ring-2 focus:ring-blue-500 outline-none
-                  "
+                  className="w-full h-11 bg-white/70 border rounded-xl pl-11 pr-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
               </div>
               {errors.email && (
@@ -97,19 +166,13 @@ export default function LoginForm() {
             <div>
               <label className="text-sm font-medium">Password</label>
               <div className="relative mt-2">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500 z-10" />
-
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500" />
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
                   placeholder="Enter your password"
-                  className="
-                    w-full h-11 bg-white/70 backdrop-blur
-                    border rounded-xl pl-11 pr-11 text-sm
-                    focus:ring-2 focus:ring-blue-500 outline-none
-                  "
+                  className="w-full h-11 bg-white/70 border rounded-xl pl-11 pr-11 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
                 />
-
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -122,7 +185,6 @@ export default function LoginForm() {
                   )}
                 </button>
               </div>
-
               {errors.password && (
                 <p className="text-xs text-red-600 mt-1">
                   {errors.password.message}
@@ -140,16 +202,11 @@ export default function LoginForm() {
               </Link>
             </div>
 
-            {/* LOGIN */}
+            {/* LOGIN BUTTON */}
             <button
               type="submit"
               disabled={isSubmitting || pending}
-              className="
-                w-full h-11 rounded-xl
-                bg-blue-600 text-white font-medium
-                hover:bg-blue-700 transition
-                disabled:opacity-60
-              "
+              className="w-full h-11 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:opacity-60"
             >
               {isSubmitting || pending ? "Signing in..." : "Sign In"}
             </button>
@@ -161,7 +218,7 @@ export default function LoginForm() {
               <span className="w-full border-t border-blue-200" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gradient-to-br from-white to-blue-50 px-2 text-gray-400">
+              <span className="bg-white px-2 text-gray-400">
                 Or continue with
               </span>
             </div>
@@ -170,21 +227,9 @@ export default function LoginForm() {
           {/* GOOGLE LOGIN */}
           <button
             type="button"
-            className="
-              w-full h-11 rounded-xl
-              border bg-white/70 backdrop-blur
-              flex items-center justify-center gap-3
-              text-sm font-medium
-              transition-all duration-200
-              hover:bg-blue-600 hover:text-white hover:shadow-md
-            "
+            className="w-full h-11 rounded-xl border bg-white flex items-center justify-center gap-3 text-sm font-medium hover:bg-blue-600 hover:text-white transition"
           >
-            <Image
-              src={GoogleLogo}
-              alt="Google"
-              width={26}
-              height={26}
-            />
+            <Image src={GoogleLogo} alt="Google" width={26} height={26} />
             Sign in with Google
           </button>
 
