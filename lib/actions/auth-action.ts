@@ -1,8 +1,9 @@
 "use server";
-import { login, register } from "@/lib/api/auth"
+import { login, register, updateProfile, whoAmI } from "@/lib/api/auth"
 import { LoginData, RegisterData } from "@/app/(auth)/schema"
 import { setAuthToken, setUserData, clearAuthCookies } from "../cookie"
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 export const handleRegister = async (data: RegisterData) => {
     try {
         const response = await register(data)
@@ -43,7 +44,77 @@ export const handleLogin = async (data: LoginData) => {
     }
 }
 
+// export const handleLogin = async (data: LoginData) => {
+//   try {
+//     const response = await login(data);
+
+//     if (!response.success) {
+//       return {
+//         success: false,
+//         message: response.message || "Login failed",
+//       };
+//     }
+
+//     const user: AuthUser = {
+//   _id: response.data._id,
+//   email: response.data.email,
+//   username: response.data.username,
+//   role: response.data.role,
+// };
+
+//     await setAuthToken(response.token);
+//     await setUserData(user);
+
+//     return {
+//       success: true,
+//       message: "Login successful",
+//       data: user,
+//     };
+//   } catch (error: any) {
+//     console.error("HANDLE LOGIN ERROR 👉", error);
+//     return {
+//       success: false,
+//       message: "An unexpected response was received from the server.",
+//     };
+//   }
+// };
+
+
 export const handleLogout = async () => {
     await clearAuthCookies();
     return redirect('/login');
+}
+
+export async function handleWhoAmI() {
+    try {
+        const result = await whoAmI();
+        if (result.success) {
+            return {
+                success: true,
+                message: 'User data fetched successfully',
+                data: result.data
+            };
+        }
+        return { success: false, message: result.message || 'Failed to fetch user data' };
+    } catch (error: Error | any) {
+        return { success: false, message: error.message };
+    }
+}
+
+export async function handleUpdateProfile(profileData: FormData) {
+    try {
+        const result = await updateProfile(profileData);
+        if (result.success) {
+            await setUserData(result.data); // update cookie 
+            revalidatePath('/user/profile'); // revalidate profile page/ refresh new data
+            return {
+                success: true,
+                message: 'Profile updated successfully',
+                data: result.data
+            };
+        }
+        return { success: false, message: result.message || 'Failed to update profile' };
+    } catch (error: Error | any) {
+        return { success: false, message: error.message };
+    }
 }
