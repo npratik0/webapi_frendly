@@ -123,9 +123,9 @@ const ForgetPasswordForm = () => {
         <div className="relative text-center space-y-10 px-10 z-10">
           <div>
             <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
+              {/* <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                 <Sparkles className="w-9 h-9" />
-              </div>
+              </div> */}
             </div>
             <h1 className="text-6xl font-bold italic tracking-wide mb-6">
               Frendly

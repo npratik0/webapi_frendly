@@ -77,7 +77,7 @@ export default function Sidebar() {
         href === "/admin" ? pathname === href : pathname?.startsWith(href);
 
     return (
-        <aside className="fixed md:static top-0 left-0 h-screen w-64 bg-gradient-to-b from-blue-600 to-blue-700 text-white z-40 overflow-y-auto shadow-xl">
+        <aside className="fixed md:static top-0 left-0 h-screen w-64 bg-linear-to-b from-blue-600 to-blue-700 text-white z-40 overflow-y-auto shadow-xl">
             {/* Logo Section */}
             <div className="p-6 border-b border-blue-500/30">
                 <Link href="/admin" className="flex items-center gap-3 group">
@@ -123,7 +123,7 @@ export default function Sidebar() {
             {/* Footer */}
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-blue-500/30">
                 <div className="text-xs text-blue-200 text-center">
-                    © 2024 Frendly
+                    © 2026 Frendly
                 </div>
             </div>
         </aside>
