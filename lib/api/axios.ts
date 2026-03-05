@@ -23,4 +23,28 @@ axiosInstance.interceptors.request.use(
     }
 );
 
+// Add request interceptor for debugging
+axiosInstance.interceptors.request.use(
+  (config) => {
+    console.log(`📡 API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error("❌ API Request Error:", error);
+    return Promise.reject(error);
+  }
+);
+
+// Add response interceptor for debugging
+axiosInstance.interceptors.response.use(
+  (response) => {
+    console.log(`✅ API Response: ${response.config.url}`, response.status);
+    return response;
+  },
+  (error) => {
+    console.error("❌ API Response Error:", error.response?.data || error.message);
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;

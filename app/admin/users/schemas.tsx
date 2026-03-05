@@ -7,8 +7,9 @@ export const UserSchema = z.object({
     email: z.email({ message: "Enter a valid email" }),
     password: z.string().min(6, { message: "Minimum 6 characters" }),
     confirmPassword: z.string().min(6, { message: "Minimum 6 characters" }),
-    firstName: z.string().optional(),
-    lastName: z.string().optional(),
+    // firstName: z.string().optional(),
+    // lastName: z.string().optional(),
+    fullName: z.string().min(2, "Full name is required"),
     username: z.string().min(3, { message: "Username must be at least 3 characters" }),
     image: z
         .instanceof(File)
@@ -28,3 +29,22 @@ export type UserData = z.infer<typeof UserSchema>;
 
 export const UserEditSchema = UserSchema.partial()
 export type UserEditData = z.infer<typeof UserEditSchema>;
+
+export const adminCreateUserSchema = z
+  .object({
+    fullName: z.string().min(2, "Full name is required"),
+    email: z.string().email("Invalid email"),
+    phone: z.string().optional(),
+    gender: z.enum(["male", "female", "other"]),
+    role: z.enum(["user", "admin"]),
+    password: z.string().min(6, "Minimum 6 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "Passwords do not match",
+  });
+
+export type AdminCreateUserFormData = z.infer<
+  typeof adminCreateUserSchema
+>;

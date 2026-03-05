@@ -47,10 +47,10 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
+          {/* <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300">
             <span className="text-white font-bold text-xl">F</span>
-          </div>
-          <h1 className="text-2xl font-extrabold italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          </div> */}
+          <h1 className="text-3xl font-extrabold italic bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
             Frendly
           </h1>
         </Link>

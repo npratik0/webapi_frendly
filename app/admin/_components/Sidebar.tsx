@@ -81,8 +81,8 @@ export default function Sidebar() {
             {/* Logo Section */}
             <div className="p-6 border-b border-blue-500/30">
                 <Link href="/admin" className="flex items-center gap-3 group">
-                    <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center shadow-lg transform group-hover:scale-105 transition-transform">
-                        <span className="text-blue-600 font-bold text-xl">F</span>
+                    <div className="h-10 w-10 rounded-xl bg-blue-600 flex items-center justify-center  transform group-hover:scale-105 transition-transform">
+                        {/* <span className="text-blue-600 font-bold text-xl">F</span> */}
                     </div>
                     <div className="flex flex-col">
                         <span className="font-bold text-lg">Frendly</span>
