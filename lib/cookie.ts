@@ -12,13 +12,6 @@ interface UserData {
     [key: string]: any;
 }
 
-// export interface AuthUser {
-//   _id: string;
-//   email: string;
-//   username: string;
-//   role: "admin" | "user";
-// }
-
 
 export const setAuthToken = async (token: string) => {
     const cookieStore = await cookies();
@@ -39,13 +32,6 @@ export const setUserData = async (userData: UserData) => {
     })
 }
 
-// export const setUserData = async (userData: AuthUser) => {
-//     const cookieStore = await cookies();
-//     cookieStore.set({
-//         name: 'user_data',
-//         value: JSON.stringify(userData),
-//     })
-// }
 
 export const getUserData = async (): Promise<UserData | null> => {
     const cookieStore = await cookies();
@@ -53,11 +39,6 @@ export const getUserData = async (): Promise<UserData | null> => {
     return userData ? JSON.parse(userData) : null;
 }
 
-// export const getUserData = async (): Promise<AuthUser | null> => {
-//     const cookieStore = await cookies();
-//     const userData = cookieStore.get('user_data')?.value || null;
-//     return userData ? JSON.parse(userData) : null;
-// }
 
 export const clearAuthCookies = async () => {
     const cookieStore = await cookies();

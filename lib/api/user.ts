@@ -1,30 +1,3 @@
-// import axiosInstance from "./axios";
-// import { API } from "./endpoints";
-
-// export interface User {
-//   _id: string;
-//   username: string;
-//   email: string;
-//   fullName: string;
-//   phoneNumber?: number;
-//   gender?: string;
-//   profilePicture?: string;
-//   bio?: string;
-//   role: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// export const userAPI = {
-  // getCurrentUser: async () => {
-  //   const response = await axiosInstance.get(API.AUTH.WHOAMI);
-  //   return response.data;
-//   },
-// };
-
-
-
-
 import axiosInstance from "./axios";
 import { API } from "./endpoints";
 
@@ -49,10 +22,6 @@ export interface User {
 }
 
 export const userAPI = {
-  // getCurrentUser: async () => {
-  //   const response = await axiosInstance.get("/api/auth/me");
-  //   return response.data;
-  // },
 
   getCurrentUser: async () => {
     const response = await axiosInstance.get(API.AUTH.WHOAMI);

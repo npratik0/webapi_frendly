@@ -44,42 +44,6 @@ export const handleLogin = async (data: LoginData) => {
     }
 }
 
-// export const handleLogin = async (data: LoginData) => {
-//   try {
-//     const response = await login(data);
-
-//     if (!response.success) {
-//       return {
-//         success: false,
-//         message: response.message || "Login failed",
-//       };
-//     }
-
-//     const user: AuthUser = {
-//   _id: response.data._id,
-//   email: response.data.email,
-//   username: response.data.username,
-//   role: response.data.role,
-// };
-
-//     await setAuthToken(response.token);
-//     await setUserData(user);
-
-//     return {
-//       success: true,
-//       message: "Login successful",
-//       data: user,
-//     };
-//   } catch (error: any) {
-//     console.error("HANDLE LOGIN ERROR 👉", error);
-//     return {
-//       success: false,
-//       message: "An unexpected response was received from the server.",
-//     };
-//   }
-// };
-
-
 export const handleLogout = async () => {
     await clearAuthCookies();
     return redirect('/login');
